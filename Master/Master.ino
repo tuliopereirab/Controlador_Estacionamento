@@ -37,17 +37,25 @@ void inicializaLeds(){
 
 void loop(){
   int i;
+  int entradaSerial;
+  if(Serial.available()){
+    entradaSerial = Serial.read() - '0';
+    Serial.print("Iniciada retirada da vaga ");
+    Serial.println(entradaSerial);
+    saida(entradaSerial);
+  }
   entrada(1);
   delay(2000);
   entrada(0);
   delay(2000);
   entrada(1);
   delay(2000);
-  saida(5);
 }
 
 void entrada(int entrada){    // sul = 1; norte = 0;
   int vagaEscolhida;
+  Serial.println("-----------------------");
+  Serial.println("==== ENTRADA ====");
   if(nCarrosEst < nVagas){
     Serial.println("Carro permitido!");
     nCarrosEst++;
@@ -69,6 +77,8 @@ void entrada(int entrada){    // sul = 1; norte = 0;
   digitalWrite(ledVerm[vagaEscolhida/2], HIGH);
   Serial.print("Vaga escolhida: ");
   Serial.println(vagaEscolhida);
+
+  Serial.println("-----------------------");
 }
 
 int buscarVaga(int in){     // escolhe a vaga mais próxima da entrada (caso seja possível)
@@ -89,6 +99,8 @@ int buscarVaga(int in){     // escolhe a vaga mais próxima da entrada (caso sej
 }
 
 void saida(int vaga){      // indica ao vetor de vagas que a vaga foi liberada
+  Serial.println("-----------------------");
+  Serial.println("==== SAIDA ====");
   if(nCarrosEst > 0){
     if(vagas[vaga] == 1){
       vagas[vaga] = 0;
