@@ -9,6 +9,10 @@ void setup(){
   vagas = malloc(sizeof(int)*nVagas);
   ledVerm = malloc(sizeof(int)*nLedsVerm);
   inicializar();
+  int i;
+  for(i=0; i<nLedsVerm; i++){
+    pinMode(ledVerm[i], OUTPUT);
+  }
 }
 
 void inicializar(){
