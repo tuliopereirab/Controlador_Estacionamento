@@ -15,9 +15,11 @@ void inicializar(){
 }
 
 void loop(){
+  saida(3);
+  delay(1000);
   entrada(1);
   delay(1000);
-  entrada(0);
+  entrada(1);
   delay(1000);
 }
 
@@ -58,5 +60,22 @@ int buscarVaga(int in){     // escolhe a vaga mais próxima da entrada (caso sej
         return i;
       }
     }
+  }
+}
+
+void saida(int vaga){      // indica ao vetor de vagas que a vaga foi liberada
+  if(nCarrosEst > 0){
+    if(vagas[vaga] == 1){
+      vagas[vaga] = 0;
+      nCarrosEst--;
+      Serial.print("Carro removido com sucesso da vaga: ");
+      Serial.println(vaga);
+    }else{
+      Serial.print("Vaga ");
+      Serial.print(vaga);
+      Serial.println(" já está vazia!"); 
+    }
+  }else{
+    Serial.println("Nenhum carro está estacionado!");
   }
 }
