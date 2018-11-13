@@ -1,8 +1,13 @@
+#define nLedsVerm 8
+
 int *vagas, nCarrosEst=0;
 int nVagas = 16;
+int *ledVerm;
+
 void setup(){
   Serial.begin(9600);
   vagas = malloc(sizeof(int)*nVagas);
+  ledVerm = malloc(sizeof(int)*nLedsVerm);
   inicializar();
 }
 
@@ -11,16 +16,34 @@ void inicializar(){
   for(i=0; i<nVagas; i++){
     vagas[i] = 0; // indica que todas as vagas estão vazias
   }
+  inicializaLeds();
+  for(i=0; i<nLedsVerm; i++){
+    digitalWrite(ledVerm[i], LOW);    // desliga todos os leds vermelhos
+  }
   Serial.println("Inicializado...");
 }
 
+void inicializaLeds(){
+  ledVerm[0] = A1;
+  ledVerm[1] = A2;
+  ledVerm[2] = 3;
+  ledVerm[3] = 4;
+  ledVerm[4] = 5;
+  ledVerm[5] = 6;
+  ledVerm[6] = 7;
+  ledVerm[7] = 8;
+  Serial.println("Pinos dos leds setados...");
+}
+
 void loop(){
-  saida(3);
-  delay(1000);
+  int i;
   entrada(1);
-  delay(1000);
+  delay(2000);
+  entrada(0);
+  delay(2000);
   entrada(1);
-  delay(1000);
+  delay(2000);
+  saida(5);
 }
 
 void entrada(int entrada){    // sul = 1; norte = 0;
@@ -41,7 +64,9 @@ void entrada(int entrada){    // sul = 1; norte = 0;
   }
 
   vagas[vagaEscolhida] = 1;   // indica que a vaga está ocupada
-
+  //piscaLed(ledVerm[vagaEscolhida/2]);
+  Serial.println(vagaEscolhida/2);
+  digitalWrite(ledVerm[vagaEscolhida/2], HIGH);
   Serial.print("Vaga escolhida: ");
   Serial.println(vagaEscolhida);
 }
@@ -68,6 +93,7 @@ void saida(int vaga){      // indica ao vetor de vagas que a vaga foi liberada
     if(vagas[vaga] == 1){
       vagas[vaga] = 0;
       nCarrosEst--;
+      digitalWrite(ledVerm[vaga], LOW);
       Serial.print("Carro removido com sucesso da vaga: ");
       Serial.println(vaga);
     }else{
@@ -77,5 +103,15 @@ void saida(int vaga){      // indica ao vetor de vagas que a vaga foi liberada
     }
   }else{
     Serial.println("Nenhum carro está estacionado!");
+  }
+}
+
+
+void piscaLed(int led){
+  int i;
+  for(i=0; i<1000; i++){
+    digitalWrite(led, HIGH);
+    delay(500);
+    digitalWrite(led, LOW);
   }
 }
