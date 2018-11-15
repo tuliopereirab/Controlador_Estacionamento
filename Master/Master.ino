@@ -115,8 +115,8 @@ void loop(){
   int entradaSerial;
   if(Serial.available()){
     entradaSerial = Serial.read() - '0';
-    Serial.print("Iniciada retirada da vaga ");
-    Serial.println(entradaSerial);
+    //Serial.print("Iniciada retirada da vaga ");
+    //Serial.println(entradaSerial);
     saida(entradaSerial);
   }
   delay(500);
