@@ -145,7 +145,7 @@ void entrada(int entrada){    // sul = 1; norte = 0;
   
     vagas[vagaEscolhida] = 1;   // indica que a vaga está ocupada
     //piscaLed(ledVerm[vagaEscolhida/2]);
-    Serial.println(vagaEscolhida/2);
+    //Serial.println(vagaEscolhida/2);
     digitalWrite(ledVerm[vagaEscolhida/2], HIGH);
     Serial.print("Vaga escolhida: ");
     Serial.println(vagaEscolhida);
