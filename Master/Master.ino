@@ -9,6 +9,8 @@ int *trig, *echo;
 int trancarEntrada = 0;   // evita duas entradas simultâneas (uma em cada sensor);
 int contadorEntrada=0;    // conta o tempo entre uma entrada e a liberação para a próxima
 int contador = 0;         // conta o tempo de verificação dos sensores
+int statusSaida = 0;      // evita que sejam feitas duas chamadas da função saída quando for digitado um valor qualquer (tranca e depois libera)
+
 
 ISR(TIMER1_OVF_vect){     // conta o tempo necessário para entrada e libera a entrada após esse tempo
   contadorEntrada++;
@@ -113,15 +115,22 @@ void inicializaTimers(){
 void loop(){
   int i;
   int entradaSerial, entradaSerial2;
-  if(Serial.available()){
-    entradaSerial = Serial.read() - '0';
+  if(trancarEntrada == 0){
     if(Serial.available()){
-      entradaSerial2 = Serial.read() - '0';
-      entradaSerial = concatena(entradaSerial, entradaSerial2);
+      entradaSerial = Serial.read() - '0';
+      if(Serial.available()){
+        entradaSerial2 = Serial.read() - '0';
+        entradaSerial = concatena(entradaSerial, entradaSerial2);
+      }
+      if(statusSaida == 1){    // verifica se já foi realizada outra saída
+        statusSaida = 0;    // libera para poder realizar outra saída
+      }else{
+        trancarEntrada = 1;
+        contadorEntrada = 0;
+        statusSaida = 1;         // como é a primeira vez que está passando por aqui pra um mesmo valor, define que já passou e tranca a saída
+        saida(entradaSerial);
+      }
     }
-    //Serial.print("Iniciada retirada da vaga ");
-    //Serial.println(entradaSerial);
-    saida(entradaSerial);
   }
   delay(500);
   //entrada(1);
@@ -200,6 +209,7 @@ void saida(int vaga){      // indica ao vetor de vagas que a vaga foi liberada
   }else{
     Serial.println("Vaga não existe!");
   }
+  Serial.println("-----------------------");
 }
 
 
