@@ -9,6 +9,8 @@ int *trig, *echo;
 int trancarEntrada = 0;   // evita duas entradas simultâneas (uma em cada sensor);
 int contadorEntrada=0;    // conta o tempo entre uma entrada e a liberação para a próxima
 int contador = 0;         // conta o tempo de verificação dos sensores
+int statusSaida = 0;      // evita que sejam feitas duas chamadas da função saída quando for digitado um valor qualquer (tranca e depois libera)
+
 
 ISR(TIMER1_OVF_vect){     // conta o tempo necessário para entrada e libera a entrada após esse tempo
   contadorEntrada++;
@@ -81,7 +83,7 @@ void inicializaLeds(){     // mapeamento dos pinos dos LEDS
   ledVerm[0] = A1;
   ledVerm[1] = A2;
   ledVerm[2] = 3;
-  ledVerm[3] = 4;
+  ledVerm[3] = 2;
   ledVerm[4] = 5;
   ledVerm[5] = 6;
   ledVerm[6] = 7;
@@ -112,12 +114,23 @@ void inicializaTimers(){
 
 void loop(){
   int i;
-  int entradaSerial;
-  if(Serial.available()){
-    entradaSerial = Serial.read() - '0';
-    //Serial.print("Iniciada retirada da vaga ");
-    //Serial.println(entradaSerial);
-    saida(entradaSerial);
+  int entradaSerial, entradaSerial2;
+  if(trancarEntrada == 0){
+    if(Serial.available()){
+      entradaSerial = Serial.read() - '0';
+      if(Serial.available()){
+        entradaSerial2 = Serial.read() - '0';
+        entradaSerial = concatena(entradaSerial, entradaSerial2);
+      }
+      if(statusSaida == 1){    // verifica se já foi realizada outra saída
+        statusSaida = 0;    // libera para poder realizar outra saída
+      }else{
+        trancarEntrada = 1;
+        contadorEntrada = 0;
+        statusSaida = 1;         // como é a primeira vez que está passando por aqui pra um mesmo valor, define que já passou e tranca a saída
+        saida(entradaSerial);
+      }
+    }
   }
   delay(500);
   //entrada(1);
@@ -129,7 +142,7 @@ void loop(){
 }
 
 void entrada(int entrada){    // sul = 1; norte = 0;
-  int vagaEscolhida;
+  int vagaEscolhida, codeCaminho;
   Serial.println("-----------------------");
   Serial.println("==== ENTRADA ====");
   if(nCarrosEst < nVagas){
@@ -149,7 +162,11 @@ void entrada(int entrada){    // sul = 1; norte = 0;
     digitalWrite(ledVerm[vagaEscolhida/2], HIGH);
     Serial.print("Vaga escolhida: ");
     Serial.println(vagaEscolhida);
-  
+
+    
+    codeCaminho = verCode(entrada, vagaEscolhida);    // define o código do caminho com base na entrada e vaga para enviar ao slave
+    Serial.write(codeCaminho);          // envia o código ao slave
+    
     Serial.println("-----------------------");
   }else{
     Serial.println("Estacionamento lotado!");
@@ -177,21 +194,26 @@ int buscarVaga(int in){     // escolhe a vaga mais próxima da entrada (caso sej
 void saida(int vaga){      // indica ao vetor de vagas que a vaga foi liberada
   Serial.println("-----------------------");
   Serial.println("==== SAIDA ====");
-  if(nCarrosEst > 0){
-    if(vagas[vaga] == 1){
-      vagas[vaga] = 0;
-      nCarrosEst--;
-      digitalWrite(ledVerm[vaga], LOW);
-      Serial.print("Carro removido com sucesso da vaga: ");
-      Serial.println(vaga);
+  if((vaga < 16) && (vaga >= 0)){
+    if(nCarrosEst > 0){
+      if(vagas[vaga] == 1){
+        vagas[vaga] = 0;
+        nCarrosEst--;
+        digitalWrite(ledVerm[vaga], LOW);
+        Serial.print("Carro removido com sucesso da vaga: ");
+        Serial.println(vaga);
+      }else{
+        Serial.print("Vaga ");
+        Serial.print(vaga);
+        Serial.println(" já está vazia!"); 
+      }
     }else{
-      Serial.print("Vaga ");
-      Serial.print(vaga);
-      Serial.println(" já está vazia!"); 
+      Serial.println("Nenhum carro está estacionado!");
     }
   }else{
-    Serial.println("Nenhum carro está estacionado!");
+    Serial.println("Vaga não existe!");
   }
+  Serial.println("-----------------------");
 }
 
 
@@ -211,7 +233,123 @@ float verDistancia(int sensor){ // 0 - SUL / 1 - NORTE
   digitalWrite(trig[sensor], LOW);
 
   float tempo = pulseIn(echo[sensor], HIGH);
-
-  return tempo/29.4/2;  
   
+  //Serial.print("Distancia: ");
+  //Serial.print(tempo/29.4/2);
+  //Serial.println("cm");
+  return tempo/29.4/2; 
+  
+}
+
+int concatena(int val1, int val2){
+  char str[2];
+  str[0] = val1 + '0';
+  str[1] = val2 + '0';
+  return atoi(str);
+}
+
+int verCode(int entrada, int vaga){ // sul = 1 / norte = 0;
+  if(entrada == 0){        // norte
+    switch(vaga){
+      case 0:
+        return 27;
+        break;
+      case 1:
+        return 28;
+        break;
+      case 2:
+        return 29;
+        break;
+      case 3:
+        return 30;
+        break;
+      case 4:
+        return 31;
+        break;
+      case 5:
+        return 32;
+        break;
+      case 6:
+        return 33;
+        break;
+      case 7:
+        return 34;
+        break;
+      case 8:
+        return 35;
+        break;
+      case 9:
+        return 36;
+        break;
+      case 10:
+        return 37;
+        break;
+      case 11:
+        return 38;
+        break;
+      case 12:
+        return 39;
+        break;
+      case 13:
+        return 40;
+        break;
+      case 14:
+        return 41;
+        break;
+      case 15:
+        return 42;
+        break;
+    }
+  }else{
+    switch(vaga){
+      case 0:
+        return 11;
+        break;
+      case 1:
+        return 12;
+        break;
+      case 2:
+        return 13;
+        break;
+      case 3:
+        return 14;
+        break;
+      case 4:
+        return 15;
+        break;
+      case 5:
+        return 16;
+        break;
+      case 6:
+        return 17;
+        break;
+      case 7:
+        return 18;
+        break;
+      case 8:
+        return 19;
+        break;
+      case 9:
+        return 20;
+        break;
+      case 10:
+        return 21;
+        break;
+      case 11:
+        return 22;
+        break;
+      case 12:
+        return 23;
+        break;
+      case 13:
+        return 24;
+        break;
+      case 14:
+        return 25;
+        break;
+      case 15:
+        return 26;
+        break;
+    }
+  }
 }
