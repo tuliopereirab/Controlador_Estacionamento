@@ -81,7 +81,7 @@ void inicializaLeds(){     // mapeamento dos pinos dos LEDS
   ledVerm[0] = A1;
   ledVerm[1] = A2;
   ledVerm[2] = 3;
-  ledVerm[3] = 4;
+  ledVerm[3] = 2;
   ledVerm[4] = 5;
   ledVerm[5] = 6;
   ledVerm[6] = 7;
@@ -112,9 +112,13 @@ void inicializaTimers(){
 
 void loop(){
   int i;
-  int entradaSerial;
+  int entradaSerial, entradaSerial2;
   if(Serial.available()){
     entradaSerial = Serial.read() - '0';
+    if(Serial.available()){
+      entradaSerial2 = Serial.read() - '0';
+      entradaSerial = concatena(entradaSerial, entradaSerial2);
+    }
     //Serial.print("Iniciada retirada da vaga ");
     //Serial.println(entradaSerial);
     saida(entradaSerial);
@@ -177,20 +181,24 @@ int buscarVaga(int in){     // escolhe a vaga mais próxima da entrada (caso sej
 void saida(int vaga){      // indica ao vetor de vagas que a vaga foi liberada
   Serial.println("-----------------------");
   Serial.println("==== SAIDA ====");
-  if(nCarrosEst > 0){
-    if(vagas[vaga] == 1){
-      vagas[vaga] = 0;
-      nCarrosEst--;
-      digitalWrite(ledVerm[vaga], LOW);
-      Serial.print("Carro removido com sucesso da vaga: ");
-      Serial.println(vaga);
+  if((vaga < 16) && (vaga >= 0)){
+    if(nCarrosEst > 0){
+      if(vagas[vaga] == 1){
+        vagas[vaga] = 0;
+        nCarrosEst--;
+        digitalWrite(ledVerm[vaga], LOW);
+        Serial.print("Carro removido com sucesso da vaga: ");
+        Serial.println(vaga);
+      }else{
+        Serial.print("Vaga ");
+        Serial.print(vaga);
+        Serial.println(" já está vazia!"); 
+      }
     }else{
-      Serial.print("Vaga ");
-      Serial.print(vaga);
-      Serial.println(" já está vazia!"); 
+      Serial.println("Nenhum carro está estacionado!");
     }
   }else{
-    Serial.println("Nenhum carro está estacionado!");
+    Serial.println("Vaga não existe!");
   }
 }
 
@@ -211,7 +219,17 @@ float verDistancia(int sensor){ // 0 - SUL / 1 - NORTE
   digitalWrite(trig[sensor], LOW);
 
   float tempo = pulseIn(echo[sensor], HIGH);
-
-  return tempo/29.4/2;  
   
+  //Serial.print("Distancia: ");
+  //Serial.print(tempo/29.4/2);
+  //Serial.println("cm");
+  return tempo/29.4/2; 
+  
+}
+
+int concatena(int val1, int val2){
+  char str[2];
+  str[0] = val1 + '0';
+  str[1] = val2 + '0';
+  return atoi(str);
 }
