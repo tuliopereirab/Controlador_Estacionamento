@@ -142,7 +142,7 @@ void loop(){
 }
 
 void entrada(int entrada){    // sul = 1; norte = 0;
-  int vagaEscolhida;
+  int vagaEscolhida, codeCaminho;
   Serial.println("-----------------------");
   Serial.println("==== ENTRADA ====");
   if(nCarrosEst < nVagas){
@@ -162,7 +162,11 @@ void entrada(int entrada){    // sul = 1; norte = 0;
     digitalWrite(ledVerm[vagaEscolhida/2], HIGH);
     Serial.print("Vaga escolhida: ");
     Serial.println(vagaEscolhida);
-  
+
+    
+    codeCaminho = verCode(entrada, vagaEscolhida);    // define o código do caminho com base na entrada e vaga para enviar ao slave
+    Serial.write(codeCaminho);          // envia o código ao slave
+    
     Serial.println("-----------------------");
   }else{
     Serial.println("Estacionamento lotado!");
@@ -242,4 +246,110 @@ int concatena(int val1, int val2){
   str[0] = val1 + '0';
   str[1] = val2 + '0';
   return atoi(str);
+}
+
+int verCode(int entrada, int vaga){ // sul = 1 / norte = 0;
+  if(entrada == 0){        // norte
+    switch(vaga){
+      case 0:
+        return 27;
+        break;
+      case 1:
+        return 28;
+        break;
+      case 2:
+        return 29;
+        break;
+      case 3:
+        return 30;
+        break;
+      case 4:
+        return 31;
+        break;
+      case 5:
+        return 32;
+        break;
+      case 6:
+        return 33;
+        break;
+      case 7:
+        return 34;
+        break;
+      case 8:
+        return 35;
+        break;
+      case 9:
+        return 36;
+        break;
+      case 10:
+        return 37;
+        break;
+      case 11:
+        return 38;
+        break;
+      case 12:
+        return 39;
+        break;
+      case 13:
+        return 40;
+        break;
+      case 14:
+        return 41;
+        break;
+      case 15:
+        return 42;
+        break;
+    }
+  }else{
+    switch(vaga){
+      case 0:
+        return 11;
+        break;
+      case 1:
+        return 12;
+        break;
+      case 2:
+        return 13;
+        break;
+      case 3:
+        return 14;
+        break;
+      case 4:
+        return 15;
+        break;
+      case 5:
+        return 16;
+        break;
+      case 6:
+        return 17;
+        break;
+      case 7:
+        return 18;
+        break;
+      case 8:
+        return 19;
+        break;
+      case 9:
+        return 20;
+        break;
+      case 10:
+        return 21;
+        break;
+      case 11:
+        return 22;
+        break;
+      case 12:
+        return 23;
+        break;
+      case 13:
+        return 24;
+        break;
+      case 14:
+        return 25;
+        break;
+      case 15:
+        return 26;
+        break;
+    }
+  }
 }
