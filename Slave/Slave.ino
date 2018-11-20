@@ -1,18 +1,18 @@
-#define  S00 A1
-#define  S01 A2
-#define  S02 2
-#define  S03 3
-#define  S04 4
-#define  S05 5
-#define  S06 6 // #define  S12 6 -> mesma coisa que S06 por causa das ligações da protoboard
-#define  S07 7
-#define  S08 8
-#define  S09 9
-#define  S10 10
-#define  S11 11
+  #define  S00 A1
+  #define  S01 A2
+  #define  S02 2
+  #define  S03 3
+  #define  S04 4
+  #define  S05 5
+  #define  S06 6 // #define  S12 6 -> mesma coisa que S06 por causa das ligações da protoboard
+  #define  S07 7
+  #define  S08 8
+  #define  S09 9
+  #define  S10 10
+  #define  S11 11
 
 
-int flag_testeLed=0, i=-1, flag_switch=0;
+int flag_testeLed=0, i=0, flag_switch=0;
 char cod[3];
 int estado;
 
@@ -113,16 +113,16 @@ void loop() {
         while((Serial.available() && (i<2))){
       cod[i++] = Serial.read();
     }
-    cod[i++] = '/0'; 
+   // cod[i++] = '/0'; 
   }
   
-    
+  
   i=0; // reiniciando posicção do vetor
   
   if(flag_switch == 1){   // flag necessária para não sobrepor estados e conter redundancias 
 
   estado = atoi(cod);
-    
+  Serial.println(estado);  
       
     switch(estado){
       case 11: // ENTRADA SUL VAGA 0 
