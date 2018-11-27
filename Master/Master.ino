@@ -26,7 +26,8 @@ ISR(TIMER2_OVF_vect){    // verifica os sensores a cada período de tempo
   contador++;
   if(contador == 20){
     distancia = verDistancia(1);  // verificação NORTE
-    //Serial.println(distancia);
+//    Serial.print("Distancia Norte: ");
+//    Serial.println(distancia);
     if((distancia < 7) && (trancarEntrada == 0)){  // verifica presença de algum carro e se já existe uma entrada em andamento
       Serial.println("Entrada Sul!");
       trancarEntrada = 1;     // tranca a entrada enquanto se passa o tempo de entrada de 1 carro
@@ -35,7 +36,8 @@ ISR(TIMER2_OVF_vect){    // verifica os sensores a cada período de tempo
     }//else Serial.println("Sem entrada SUL.");
     
     distancia = verDistancia(0);  // verificação SUL
-    //Serial.println(distancia);
+//    Serial.print("Distancia Sul: ");
+//    Serial.println(distancia);
     if((distancia < 7) && (trancarEntrada == 0)){
       Serial.println("Entrada Norte!");
       trancarEntrada = 1;   // tranca a entrada enquanto se passa o tempo de entrada de 1 carro
@@ -121,6 +123,9 @@ void loop(){
       if(Serial.available()){
         entradaSerial2 = Serial.read() - '0';
         entradaSerial = concatena(entradaSerial, entradaSerial2);
+        Serial.flush();
+//        Serial.print("Retirar: ");
+//        Serial.println(entradaSerial);
       }
       if(statusSaida == 1){    // verifica se já foi realizada outra saída
         statusSaida = 0;    // libera para poder realizar outra saída
