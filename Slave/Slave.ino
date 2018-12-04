@@ -361,6 +361,7 @@ teste_leds();  //função que irá ligar e desligar os leds para saber se todos 
   
  // desliga_all(); // desligando os leds
       estado = vet[cont++];
+      Serial.print("Código caminho: ");
       Serial.println(estado);
       geraCaminho(estado);
       if(cont++ > 12){
