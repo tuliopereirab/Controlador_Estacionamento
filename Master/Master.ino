@@ -1,3 +1,5 @@
+#include <Wire.h>
+
 #define nLedsVerm 8
 #define nSensores 2
 
@@ -15,6 +17,9 @@ int statusSaida = 0;      // evita que sejam feitas duas chamadas da função sa
 ISR(TIMER1_OVF_vect){     // conta o tempo necessário para entrada e libera a entrada após esse tempo
   contadorEntrada++;
   if(contadorEntrada == 500){
+    Wire.beginTransmission(8);
+    Wire.write(55);
+    Wire.endTransmission();
     Serial.println("Entrada liberada!");
     trancarEntrada = 0;
   }
@@ -50,11 +55,12 @@ ISR(TIMER2_OVF_vect){    // verifica os sensores a cada período de tempo
 
 
 void setup(){
+  Wire.begin();
   Serial.begin(9600);
-  vagas = malloc(sizeof(int)*nVagas);         // aloca o número de vagas
-  ledVerm = malloc(sizeof(int)*nLedsVerm);   // aloca o vetor de leds vermelhos
-  trig = malloc(sizeof(int)*nSensores);
-  echo = malloc(sizeof(int)*nSensores);
+  vagas = (int*)malloc(sizeof(int)*nVagas);         // aloca o número de vagas
+  ledVerm = (int*)malloc(sizeof(int)*nLedsVerm);   // aloca o vetor de leds vermelhos
+  trig = (int*)malloc(sizeof(int)*nSensores);
+  echo = (int*)malloc(sizeof(int)*nSensores);
   inicializar();       // inicializa vagas vazias e leds apagados, assim como os pinos de cada led. Inicializa também os TIMERS
   int i;
   for(i=0; i<nLedsVerm; i++){
@@ -138,7 +144,7 @@ void loop(){
     }
   }
   delay(500);
-  //entrada(1);
+ // entrada(0);
   //delay(2000);
   //entrada(0);
   //delay(2000);
@@ -170,7 +176,10 @@ void entrada(int entrada){    // sul = 1; norte = 0;
 
     
     codeCaminho = verCode(entrada, vagaEscolhida);    // define o código do caminho com base na entrada e vaga para enviar ao slave
-    Serial.write(codeCaminho);          // envia o código ao slave
+    Wire.beginTransmission(8);          // envia o código ao slave
+    Wire.write(codeCaminho);
+    Wire.endTransmission();
+
     
     Serial.println("-----------------------");
   }else{
