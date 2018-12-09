@@ -125,12 +125,12 @@ void geraCaminho(){
       case 13: // ENTRADA SUL VAGA 2
         digitalWrite(S00, HIGH);
         digitalWrite(S05, HIGH);
-        digitalWrite(S06, HIGH); 
+        digitalWrite(S03, HIGH); 
         break;      
       case 14: // ENTRADA SUL VAGA 3
         digitalWrite(S00, HIGH);
         digitalWrite(S05, HIGH);
-        digitalWrite(S06, HIGH);
+        digitalWrite(S03, HIGH);
         break;      
       case 15: // ENTRADA SUL VAGA 4
         digitalWrite(S00, HIGH);
@@ -139,9 +139,7 @@ void geraCaminho(){
         break;      
       case 16: // ENTRADA SUL VAGA 5
         digitalWrite(S00, HIGH);
-        digitalWrite(S04, HIGH);
-        digitalWrite(S01, HIGH);
-        digitalWrite(S02, HIGH);
+        digitalWrite(S05, HIGH);
         digitalWrite(S07, HIGH);
         break;      
       case 17: // ENTRADA SUL VAGA 6
@@ -168,12 +166,14 @@ void geraCaminho(){
         digitalWrite(S00, HIGH);
         digitalWrite(S05, HIGH);
         digitalWrite(S06, HIGH);
+        digitalWrite(S03, HIGH);
         digitalWrite(S09, HIGH);
         break;     
       case 22: // ENTRADA SUL VAGA 11
         digitalWrite(S00, HIGH);
         digitalWrite(S05, HIGH);
         digitalWrite(S06, HIGH);
+        digitalWrite(S03, HIGH);
         digitalWrite(S09, HIGH);
         break;     
       case 23: // ENTRADA SUL VAGA 12
@@ -193,31 +193,34 @@ void geraCaminho(){
         digitalWrite(S11, HIGH);
         break;      
       case 26: // ENTRADA SUL VAGA 15
+        digitalWrite(S00, HIGH);
         digitalWrite(S05, HIGH);
         digitalWrite(S10, HIGH);
-        digitalWrite(S06, HIGH);
+        digitalWrite(S11, HIGH);
         break;      
       case 27: // ENTRADA NORTE VAGA 0
         digitalWrite(S08, HIGH);
         digitalWrite(S02, HIGH);
         digitalWrite(S01, HIGH);
         digitalWrite(S04, HIGH);
+        digitalWrite(S00, HIGH);
         break;      
       case 28: // ENTRADA NORTE VAGA 1
         digitalWrite(S08, HIGH);
         digitalWrite(S02, HIGH);
         digitalWrite(S01, HIGH);
         digitalWrite(S04, HIGH);
+        digitalWrite(S00, HIGH);
         break;      
       case 29: // ENTRADA NORTE VAGA 2
         digitalWrite(S09, HIGH);
         digitalWrite(S06, HIGH);
-        digitalWrite(S05, HIGH);
+        digitalWrite(S03, HIGH);
         break;      
       case 30: // ENTRADA NORTE VAGA 3
         digitalWrite(S09, HIGH);
         digitalWrite(S06, HIGH);
-        digitalWrite(S05, HIGH);
+        digitalWrite(S03, HIGH);
         break;      
       case 31: // ENTRADA NORTE VAGA 4
         digitalWrite(S08, HIGH);
@@ -256,10 +259,12 @@ void geraCaminho(){
       case 39: // ENTRADA NORTE VAGA 12
         digitalWrite(S09, HIGH);
         digitalWrite(S06, HIGH);
+        digitalWrite(S03, HIGH);
         break;     
       case 40: // ENTRADA NORTE VAGA 13
         digitalWrite(S09, HIGH);
         digitalWrite(S06, HIGH);
+        digitalWrite(S03, HIGH);
         break;      
       case 41: // ENTRADA NORTE VAGA 14
         digitalWrite(S09, HIGH);
