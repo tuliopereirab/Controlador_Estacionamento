@@ -5,7 +5,7 @@
 
 int *vagas, nCarrosEst = 0;
 int nVagas = 16;
-int *ledVerm;
+int *ledVerm, *ledEntrada;
 int *trig, *echo;
 
 int trancarEntrada = 0;   // evita duas entradas simultâneas (uma em cada sensor);
@@ -15,11 +15,14 @@ int statusSaida = 0;      // evita que sejam feitas duas chamadas da função sa
 
 
 ISR(TIMER1_OVF_vect) {    // conta o tempo necessário para entrada e libera a entrada após esse tempo
+  int i;
   contadorEntrada++;
   if (contadorEntrada == 500) {
 //    Wire.beginTransmission(8);
 //    Wire.write(55);
 //    Wire.endTransmission();
+    for(i=0; i<nSensores; i++)
+        digitalWrite(ledEntrada[i], LOW);     // desliga os dois leds indicando a entrada trancada
     Serial.println("Entrada liberada!");
     trancarEntrada = 0;
   }
@@ -31,8 +34,8 @@ ISR(TIMER2_OVF_vect) {   // verifica os sensores a cada período de tempo
   contador++;
   if (contador == 20) {
     distancia = verDistancia(0);  // verificação NORTE
-    Serial.print("Distancia Norte: ");
-    Serial.println(distancia);
+//    Serial.print("Distancia Norte: ");
+//    Serial.println(distancia);
     if ((distancia < 7) && (trancarEntrada == 0)) { // verifica presença de algum carro e se já existe uma entrada em andamento
       Serial.println("Entrada Norte!");
       trancarEntrada = 1;     // tranca a entrada enquanto se passa o tempo de entrada de 1 carro
@@ -41,8 +44,8 @@ ISR(TIMER2_OVF_vect) {   // verifica os sensores a cada período de tempo
     }//else Serial.println("Sem entrada SUL.");
 
     distancia = verDistancia(1);  // verificação SUL
-    Serial.print("Distancia Sul: ");
-    Serial.println(distancia);
+    //Serial.print("Distancia Sul: ");
+    //Serial.println(distancia);
     if ((distancia < 7) && (trancarEntrada == 0)) {
       Serial.println("Entrada Sul!");
       trancarEntrada = 1;   // tranca a entrada enquanto se passa o tempo de entrada de 1 carro
@@ -59,6 +62,7 @@ void setup() {
   Serial.begin(9600);
   vagas = (int*)malloc(sizeof(int) * nVagas);       // aloca o número de vagas
   ledVerm = (int*)malloc(sizeof(int) * nLedsVerm); // aloca o vetor de leds vermelhos
+  ledEntrada = (int*)malloc(sizeof(int)* nSensores);
   trig = (int*)malloc(sizeof(int) * nSensores);
   echo = (int*)malloc(sizeof(int) * nSensores);
   inicializar();       // inicializa vagas vazias e leds apagados, assim como os pinos de cada led. Inicializa também os TIMERS
@@ -67,6 +71,7 @@ void setup() {
     pinMode(ledVerm[i], OUTPUT);   // inicializa os leds vermelhos
   }
   for (i = 0; i < nSensores; i++) {
+    pinMode(ledEntrada[i], OUTPUT);
     pinMode(trig[i], OUTPUT);
     pinMode(echo[i], INPUT);
   }
@@ -96,6 +101,9 @@ void inicializaLeds() {    // mapeamento dos pinos dos LEDS
   ledVerm[5] = 6;
   ledVerm[6] = 7;
   ledVerm[7] = 8;
+  ledEntrada[0] = A0;
+  ledEntrada[1] = A3;
+  
   Serial.println("Pinos dos leds setados...");
 }
 
@@ -165,7 +173,9 @@ void loop() {
 }
 
 void entrada(int entrada) {   // sul = 1; norte = 0;
-  int vagaEscolhida, codeCaminho;
+  int vagaEscolhida, codeCaminho, i;
+  for(i=0; i<nSensores; i++)
+    digitalWrite(ledEntrada[i], HIGH);      // liga os dois leds indicando entrada trancanda
   Serial.println("-----------------------");
   Serial.println("==== ENTRADA ====");
   if (nCarrosEst < nVagas) {
@@ -188,6 +198,8 @@ void entrada(int entrada) {   // sul = 1; norte = 0;
 
 
     codeCaminho = verCode(entrada, vagaEscolhida);    // define o código do caminho com base na entrada e vaga para enviar ao slave
+    Serial.print("Código da vaga: ");
+    Serial.println(codeCaminho);
 //    Wire.beginTransmission(8);          // envia o código ao slave
 //    Wire.write(codeCaminho);
 //    Wire.endTransmission();
@@ -218,6 +230,9 @@ int buscarVaga(int in) {    // escolhe a vaga mais próxima da entrada (caso sej
 }
 
 void saida(int vaga) {     // indica ao vetor de vagas que a vaga foi liberada
+  int i;
+  for(i=0; i<nSensores; i++)
+    digitalWrite(ledEntrada[i], HIGH);      // liga os dois leds indicando entrada trancanda
   Serial.println("-----------------------");
   Serial.println("==== SAIDA ====");
   if ((vaga < 16) && (vaga >= 0)) {
@@ -245,7 +260,7 @@ void saida(int vaga) {     // indica ao vetor de vagas que a vaga foi liberada
 
 void piscaLed(int led) {
   int i;
-  for (i = 0; i < 1000; i++) {
+  while(trancarEntrada == 1) {
     digitalWrite(led, HIGH);
     delay(500);
     digitalWrite(led, LOW);
