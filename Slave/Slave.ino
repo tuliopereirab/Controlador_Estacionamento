@@ -285,6 +285,8 @@ void teste_leds(){
       }
 }
 
+
+
 void loop() {
   
 //teste_leds();  //função que irá ligar e desligar os leds para saber se todos estão ligando e desligando corretamente

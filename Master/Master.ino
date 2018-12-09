@@ -9,7 +9,7 @@ int *ledVerm;
 int *trig, *echo;
 
 int trancarEntrada = 0;   // evita duas entradas simultâneas (uma em cada sensor);
-int contadorEntrada=0;    // conta o tempo entre uma entrada e a liberação para a próxima
+int contadorEntrada=1000;    // conta o tempo entre uma entrada e a liberação para a próxima
 int contador = 0;         // conta o tempo de verificação dos sensores
 int statusSaida = 0;      // evita que sejam feitas duas chamadas da função saída quando for digitado um valor qualquer (tranca e depois libera)
 
@@ -30,24 +30,24 @@ ISR(TIMER2_OVF_vect){    // verifica os sensores a cada período de tempo
   TCNT2 = 0;
   contador++;
   if(contador == 20){
-    distancia = verDistancia(1);  // verificação NORTE
-//    Serial.print("Distancia Norte: ");
-//    Serial.println(distancia);
+    distancia = verDistancia(0);  // verificação NORTE
+    Serial.print("Distancia Norte: ");
+    Serial.println(distancia);
     if((distancia < 7) && (trancarEntrada == 0)){  // verifica presença de algum carro e se já existe uma entrada em andamento
-      Serial.println("Entrada Sul!");
+      Serial.println("Entrada Norte!");
       trancarEntrada = 1;     // tranca a entrada enquanto se passa o tempo de entrada de 1 carro
       contadorEntrada = 0;     // inicia a contar o tempo no Timer entrada
-      entrada(1);
+      //entrada(0);
     }//else Serial.println("Sem entrada SUL.");
     
-    distancia = verDistancia(0);  // verificação SUL
-//    Serial.print("Distancia Sul: ");
-//    Serial.println(distancia);
+    distancia = verDistancia(1);  // verificação SUL
+    Serial.print("Distancia Sul: ");
+    Serial.println(distancia);
     if((distancia < 7) && (trancarEntrada == 0)){
-      Serial.println("Entrada Norte!");
+      Serial.println("Entrada Sul!");
       trancarEntrada = 1;   // tranca a entrada enquanto se passa o tempo de entrada de 1 carro
       contadorEntrada = 0;     // inicia a contar o tempo no Timer entrada
-      entrada(0);
+      entrada(1);
     }//else Serial.println("Sem entrada NORTE.");
     contador = 0;
   }
@@ -143,13 +143,25 @@ void loop(){
       }
     }
   }
-  delay(500);
- // entrada(0);
-  //delay(2000);
-  //entrada(0);
-  //delay(2000);
-  //entrada(1);
-  //delay(2000);
+//  delay(500);
+//  entrada(0);
+//  delay(5000);
+//    Wire.beginTransmission(8);
+//    Wire.write(55);
+//    Wire.endTransmission();
+//    
+//  delay(5000);
+//  //delay(2000);
+//  //entrada(0);
+//  //delay(2000);
+//  
+//  entrada(1);
+//  delay(2000);
+//  
+//    Wire.beginTransmission(8);
+//    Wire.write(55);
+//    Wire.endTransmission();
+//    delay(2000);
 }
 
 void entrada(int entrada){    // sul = 1; norte = 0;
@@ -242,15 +254,18 @@ void piscaLed(int led){
 
 
 float verDistancia(int sensor){ // 0 - SUL / 1 - NORTE
+//  Serial.print("Trig: ");
+//  Serial.println(echo[sensor]);
+//  Serial.print("Echo: ");
+//  Serial.println(trig[sensor]);
   digitalWrite(trig[sensor], HIGH);
   delayMicroseconds(10);
   digitalWrite(trig[sensor], LOW);
-
   float tempo = pulseIn(echo[sensor], HIGH);
-  
-  //Serial.print("Distancia: ");
-  //Serial.print(tempo/29.4/2);
-  //Serial.println("cm");
+//  
+//  Serial.print("Distancia: ");
+//  Serial.print(tempo/29.4/2);
+//  Serial.println("cm");
   return tempo/29.4/2; 
   
 }
