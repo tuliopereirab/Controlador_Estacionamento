@@ -62,41 +62,41 @@ void gerenciaRecebido(int x){
 void liga_all(){
   
     digitalWrite(S00, HIGH);
-    Serial.println("s00");
-    delay(5000);
+//    Serial.println("s00");
+//    delay(5000);
     digitalWrite(S01, HIGH);
-    Serial.println("s01");
-    delay(5000);
+//    Serial.println("s01");
+//    delay(5000);
     digitalWrite(S02, HIGH);
-    Serial.println("s02");
-    delay(5000);
+//    Serial.println("s02");
+//    delay(5000);
     digitalWrite(S03, HIGH);
-    Serial.println("s03");
-    delay(5000);
+//    Serial.println("s03");
+//    delay(5000);
     digitalWrite(S04, HIGH);
-    Serial.println("s04");
-    delay(5000);
+//    Serial.println("s04");
+//    delay(5000);
     digitalWrite(S05, HIGH);
-    Serial.println("s05");
-    delay(5000);
+//    Serial.println("s05");
+//    delay(5000);
     digitalWrite(S06, HIGH);
-    Serial.println("s06");
-    delay(5000);
+//    Serial.println("s06");
+//    delay(5000);
     digitalWrite(S07, HIGH);
-    Serial.println("s07");
-    delay(5000);
+//    Serial.println("s07");
+//    delay(5000);
     digitalWrite(S08, HIGH);
-    Serial.println("s08");
-    delay(5000);
+//    Serial.println("s08");
+//    delay(5000);
     digitalWrite(S09, HIGH);
-    Serial.println("s09");
-    delay(5000);
+//    Serial.println("s09");
+//    delay(5000);
     digitalWrite(S10, HIGH);
-    Serial.println("s10");
-    delay(5000);
+//    Serial.println("s10");
+//    delay(5000);
     digitalWrite(S11, HIGH);
-    Serial.println("s11");
-    delay(5000);
+//    Serial.println("s11");
+//    delay(5000);
 }
 
 void desliga_all(){
@@ -312,14 +312,14 @@ void teste_leds(){
 int j=11;
 void loop() {
   liga_all();
-//  if(j>42) j=11;
-//  estado = j;
-//  geraCaminho();
-//  j++;
-//  Serial.print("Código: ");
-//  Serial.println(j);
-//  delay(10000);
-//  desliga_all();
+  if(j>42) j=11;
+  estado = j;
+  geraCaminho();
+  j++;
+  Serial.print("Código: ");
+  Serial.println(j);
+  delay(10000);
+  desliga_all();
 
 
 
