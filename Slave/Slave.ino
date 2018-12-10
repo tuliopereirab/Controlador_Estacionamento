@@ -2,16 +2,16 @@
   
   #define  S00 A1
   #define  S01 A2
-  #define  S02 2
-  #define  S03 3
-  #define  S04 4
-  #define  S05 5
-  #define  S06 6 // #define  S12 6 -> mesma coisa que S06 por causa das ligações da protoboard
-  #define  S07 7
-  #define  S08 8
-  #define  S09 9
-  #define  S10 10
-  #define  S11 11
+  #define  S02 3
+  #define  S03 4
+  #define  S04 5
+  #define  S05 6
+  #define  S06 7 // #define  S12 6 -> mesma coisa que S06 por causa das ligações da protoboard
+  #define  S07 8
+  #define  S08 9
+  #define  S09 10
+  #define  S10 11
+  #define  S11 12
 
 ///
 int flag_testeLed=0, i=0, flag_switch=0, cont=0;
@@ -41,46 +41,62 @@ void setup() {
 }
 
 void receiveEvent(int howMany){
-  estado = Wire.read();
+  int x = Wire.read();
+  Serial.print("Recebeu ");
+  Serial.println(x);
+  gerenciaRecebido(x);
+}
+void gerenciaRecebido(int x){
   waiting = 0;
-  Serial.print("Estado recebido: ");
-  Serial.println(estado);
+  estado = x;
   if(estado == 55){
     Serial.println("DESLIGA TUDO!");
     desliga_all();
+    waiting = 1;
   }else{
     Serial.println("GERANDO CAMINHO!");
     geraCaminho();
   }
-  waiting = 1;
 }
 
 void liga_all(){
   
     digitalWrite(S00, HIGH);
-    delay(150);
+    Serial.println("s00");
+    delay(5000);
     digitalWrite(S01, HIGH);
-    delay(150);
+    Serial.println("s01");
+    delay(5000);
     digitalWrite(S02, HIGH);
-    delay(150);
+    Serial.println("s02");
+    delay(5000);
     digitalWrite(S03, HIGH);
-    delay(150);
+    Serial.println("s03");
+    delay(5000);
     digitalWrite(S04, HIGH);
-    delay(150);
+    Serial.println("s04");
+    delay(5000);
     digitalWrite(S05, HIGH);
-    delay(150);
+    Serial.println("s05");
+    delay(5000);
     digitalWrite(S06, HIGH);
-    delay(150);
+    Serial.println("s06");
+    delay(5000);
     digitalWrite(S07, HIGH);
-    delay(150);
+    Serial.println("s07");
+    delay(5000);
     digitalWrite(S08, HIGH);
-    delay(150);
+    Serial.println("s08");
+    delay(5000);
     digitalWrite(S09, HIGH);
-    delay(150);
+    Serial.println("s09");
+    delay(5000);
     digitalWrite(S10, HIGH);
-    delay(150);
+    Serial.println("s10");
+    delay(5000);
     digitalWrite(S11, HIGH);
-    delay(150);
+    Serial.println("s11");
+    delay(5000);
 }
 
 void desliga_all(){
@@ -123,16 +139,16 @@ void geraCaminho(){
         break;     
       case 12: // ENTRADA SUL VAGA 1
         digitalWrite(S00, HIGH);
+        digitalWrite(S05, HIGH);
+        digitalWrite(S03, HIGH);
         break;      
       case 13: // ENTRADA SUL VAGA 2
         digitalWrite(S00, HIGH);
-        digitalWrite(S05, HIGH);
-        digitalWrite(S03, HIGH); 
         break;      
       case 14: // ENTRADA SUL VAGA 3
         digitalWrite(S00, HIGH);
         digitalWrite(S05, HIGH);
-        digitalWrite(S03, HIGH);
+        digitalWrite(S03, HIGH); 
         break;      
       case 15: // ENTRADA SUL VAGA 4
         digitalWrite(S00, HIGH);
@@ -141,13 +157,13 @@ void geraCaminho(){
         break;      
       case 16: // ENTRADA SUL VAGA 5
         digitalWrite(S00, HIGH);
-        digitalWrite(S05, HIGH);
-        digitalWrite(S07, HIGH);
+        digitalWrite(S04, HIGH);
+        digitalWrite(S01, HIGH);
         break;      
       case 17: // ENTRADA SUL VAGA 6
         digitalWrite(S00, HIGH);
         digitalWrite(S04, HIGH);
-        digitalWrite(S01, HIGH);
+        digitalWrite(S07, HIGH);
         break;      
       case 18: // ENTRADA SUL VAGA 7
         digitalWrite(S00, HIGH);
@@ -159,48 +175,48 @@ void geraCaminho(){
         digitalWrite(S05, HIGH);
         digitalWrite(S07, HIGH);
         break;      
-      case 20: // ENTRADA SUL VAGA 9
+      case 24: // ENTRADA SUL VAGA 9
+        digitalWrite(S00, HIGH);
+        digitalWrite(S05, HIGH);
+        digitalWrite(S06, HIGH);
+        digitalWrite(S03, HIGH);
+        digitalWrite(S09, HIGH);
+        break;     
+      case 25: // ENTRADA SUL VAGA 10
         digitalWrite(S00, HIGH);
         digitalWrite(S05, HIGH);
         digitalWrite(S07, HIGH);
         break;     
-      case 21: // ENTRADA SUL VAGA 10
+      case 26: // ENTRADA SUL VAGA 11
         digitalWrite(S00, HIGH);
         digitalWrite(S05, HIGH);
         digitalWrite(S06, HIGH);
         digitalWrite(S03, HIGH);
         digitalWrite(S09, HIGH);
         break;     
-      case 22: // ENTRADA SUL VAGA 11
-        digitalWrite(S00, HIGH);
-        digitalWrite(S05, HIGH);
-        digitalWrite(S06, HIGH);
-        digitalWrite(S03, HIGH);
-        digitalWrite(S09, HIGH);
-        break;     
-      case 23: // ENTRADA SUL VAGA 12
+      case 27: // ENTRADA SUL VAGA 12
         digitalWrite(S00, HIGH);
         digitalWrite(S05, HIGH);
         digitalWrite(S10, HIGH);
         break;     
-      case 24: // ENTRADA SUL VAGA 13
+      case 20: // ENTRADA SUL VAGA 13
         digitalWrite(S00, HIGH);
         digitalWrite(S05, HIGH);
         digitalWrite(S10, HIGH);
+        digitalWrite(S11, HIGH);
         break;     
-      case 25: // ENTRADA SUL VAGA 14
+      case 21: // ENTRADA SUL VAGA 14
+        digitalWrite(S00, HIGH);
+        digitalWrite(S05, HIGH);
+        digitalWrite(S10, HIGH);
+        break;      
+      case 22: // ENTRADA SUL VAGA 15
         digitalWrite(S00, HIGH);
         digitalWrite(S05, HIGH);
         digitalWrite(S10, HIGH);
         digitalWrite(S11, HIGH);
         break;      
-      case 26: // ENTRADA SUL VAGA 15
-        digitalWrite(S00, HIGH);
-        digitalWrite(S05, HIGH);
-        digitalWrite(S10, HIGH);
-        digitalWrite(S11, HIGH);
-        break;      
-      case 27: // ENTRADA NORTE VAGA 0
+      case 23: // ENTRADA NORTE VAGA 0
         digitalWrite(S08, HIGH);
         digitalWrite(S02, HIGH);
         digitalWrite(S01, HIGH);
@@ -293,13 +309,26 @@ void teste_leds(){
 }
 
 
-
+int j=11;
 void loop() {
+  liga_all();
+//  if(j>42) j=11;
+//  estado = j;
+//  geraCaminho();
+//  j++;
+//  Serial.print("Código: ");
+//  Serial.println(j);
+//  delay(10000);
+//  desliga_all();
 
-  if(waiting == 1){
-    Serial.println("Aguardando código...");
-  }
-  delay(500);
+
+
+
+
+//  if(waiting == 1){
+//    Serial.println("Aguardando código...");
+//  }
+//  delay(500);
   
 //teste_leds();  //função que irá ligar e desligar os leds para saber se todos estão ligando e desligando corretamente
 
