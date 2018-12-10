@@ -36,8 +36,8 @@ ISR(TIMER2_OVF_vect) {   // verifica os sensores a cada período de tempo
   contador++;
   if (contador == 20) {
     distancia = verDistancia(0);  // verificação NORTE
-//    Serial.print("Distancia Norte: ");
-//    Serial.println(distancia);
+    //Serial.print("Distancia Norte: ");
+    //Serial.println(distancia);
     if ((distancia < 7) && (trancarEntrada == 0)) { // verifica presença de algum carro e se já existe uma entrada em andamento
       Serial.println("Entrada Norte!");
       trancarEntrada = 1;     // tranca a entrada enquanto se passa o tempo de entrada de 1 carro
@@ -77,7 +77,7 @@ void setup() {
     pinMode(trig[i], OUTPUT);
     pinMode(echo[i], INPUT);
   }
-
+  Serial.println("Pronto!");
 }
 
 void inicializar() {
@@ -135,11 +135,15 @@ void loop() {
   int entradaSerial, entradaSerial2;
   if (trancarEntrada == 0) {
     if (Serial.available()) {
+      trancarEntrada = 1;
       entradaSerial = Serial.read() - '0';
+      delay(500);
       if (Serial.available()) {
         entradaSerial2 = Serial.read() - '0';
         entradaSerial = concatena(entradaSerial, entradaSerial2);
         Serial.flush();
+        Serial.print("Saida solicitada na vaga ");
+        Serial.println(entradaSerial);
         //        Serial.print("Retirar: ");
         //        Serial.println(entradaSerial);
       }
@@ -175,7 +179,7 @@ void loop() {
 }
 
 void entrada(int entrada) {   // sul = 1; norte = 0;
-  int vagaEscolhida, codeCaminho, i, ledVaga;
+  int vagaEscolhida, codeCaminho=0, i, ledVaga;
   for(i=0; i<nSensores; i++)
     digitalWrite(ledEntrada[i], HIGH);      // liga os dois leds indicando entrada trancanda
   Serial.println("-----------------------");
@@ -193,7 +197,7 @@ void entrada(int entrada) {   // sul = 1; norte = 0;
 
     
     vagas[vagaEscolhida] = 1;   // indica que a vaga está ocupada
-    ledVaga = definirLedVaga(vagaEscolhida);    // busca a posição do vetor ledVerm correspondente a vaga, conforme o mapa
+    //ledVaga = definirLedVaga(vagaEscolhida);    // busca a posição do vetor ledVerm correspondente a vaga, conforme o mapa
     Serial.print("Vaga escolhida: ");
     Serial.println(vagaEscolhida);
 
@@ -207,7 +211,7 @@ void entrada(int entrada) {   // sul = 1; norte = 0;
 
 
     Serial.println("-----------------------");
-    piscaLed(ledVerm[ledVaga]);        // inicia a função que piscará o led enquanto a entrada estiver trancada (carro entrando)
+    //piscaLed(ledVerm[ledVaga]);        // inicia a função que piscará o led enquanto a entrada estiver trancada (carro entrando)
   } else {
     Serial.println("Estacionamento lotado!");
     // return -1;
@@ -224,13 +228,13 @@ int definirLedVaga(int vaga){        // define o led relacionado a vaga conforme
   else if((vaga == 5) || (vaga == 7))
     return 2;
   else if((vaga == 8) || (vaga == 10))
-    return 4;
-  else if((vaga == 9) || (vaga == 11))
-    return 5;
-  else if((vaga == 12) || (vaga == 14))
     return 6;
-  else if((vaga == 13) || (vaga == 15))
+  else if((vaga == 9) || (vaga == 11))
     return 7;
+  else if((vaga == 12) || (vaga == 14))
+    return 4;
+  else if((vaga == 13) || (vaga == 15))
+    return 5;
   else
     return 7;
 }
@@ -422,19 +426,22 @@ int verCode(int entrada, int vaga) { // sul = 1 / norte = 0;
 }
 
 void atualizaLedsLigados(){             // atualiza os leds ligados: para um led estar ligado, as duas vagas correspondentes a ele precisam estar ocupadas
-  int i, anterior, legVaga, *vagasVerif;
-  vagasVerif = calloc(nVagas, sizeof(int));
+  int i, anterior;
+  int *vagasVerif;
+  int ledVaga1;
+  vagasVerif = (int*)calloc(nVagas, sizeof(int));
   i=0;
   while(i < nVagas){    // faz uma verificação para cada vaga
     if((vagasVerif[i] != 1) && (vagasVerif[i+2] != 1)){       // verifica se ja houve uma verificação para a vaga i
-      ledVaga = definirLedVaga(i);               
+      ledVaga1 = definirLedVaga(i);               
       if((vagas[i] == 1) && (vagas[i+2] == 1)){    // verifica se as duas vagas do led estão ocupadas
-        digitalWrite(ledVerm[ledVaga], HIGH);      // caso as duas estejam ocupadas, liga o led
+        digitalWrite(ledVerm[ledVaga1], HIGH);      // caso as duas estejam ocupadas, liga o led
       }else{
-        digitalWrite(ledVerm[ledVaga], LOW);      // caso uma delas ou as duas estejam livres, desliga o led
+        digitalWrite(ledVerm[ledVaga1], LOW);      // caso uma delas ou as duas estejam livres, desliga o led
       }
       vagasVerif[i] = 1;      // define que a vaga i já foi verificada
       vagasVerif[i+2] = 1;    // define que a vaga i+2 já foi verificada
     }
     i++;
+  }
 }
