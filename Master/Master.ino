@@ -12,13 +12,16 @@ int trancarEntrada = 0;   // evita duas entradas simultâneas (uma em cada senso
 int contadorEntrada = 1000;  // conta o tempo entre uma entrada e a liberação para a próxima
 int contador = 0;         // conta o tempo de verificação dos sensores
 int statusSaida = 0;      // evita que sejam feitas duas chamadas da função saída quando for digitado um valor qualquer (tranca e depois libera)
-
+int flagEnvia = 0;
+int codeGlobal, ledPiscante;
 
 ISR(TIMER1_OVF_vect) {    // conta o tempo necessário para entrada e libera a entrada após esse tempo
   int i;
   contadorEntrada++;
   if (contadorEntrada == 500) {
     //enviarSerial(55);
+    codeGlobal = 55;
+    flagEnvia = 1;
 //    Wire.beginTransmission(8);
 //    Wire.write(55);
 //    Wire.endTransmission();
@@ -39,7 +42,7 @@ ISR(TIMER2_OVF_vect) {   // verifica os sensores a cada período de tempo
     distancia = verDistancia(0);  // verificação NORTE
     //Serial.print("Distancia Norte: ");
     //Serial.println(distancia);
-    if ((distancia < 4) && (trancarEntrada == 0)) { // verifica presença de algum carro e se já existe uma entrada em andamento
+    if ((distancia < 4) && (distancia != 0) && (trancarEntrada == 0)) { // verifica presença de algum carro e se já existe uma entrada em andamento
       Serial.println("Entrada Norte!");
       trancarEntrada = 1;     // tranca a entrada enquanto se passa o tempo de entrada de 1 carro
       contadorEntrada = 0;     // inicia a contar o tempo no Timer entrada
@@ -49,7 +52,7 @@ ISR(TIMER2_OVF_vect) {   // verifica os sensores a cada período de tempo
     distancia = verDistancia(1);  // verificação SUL
     //Serial.print("Distancia Sul: ");
     //Serial.println(distancia);
-    if ((distancia < 7) && (trancarEntrada == 0)) {
+    if ((distancia < 7) && (distancia != 0) && (trancarEntrada == 0)) {
       Serial.println("Entrada Sul!");
       trancarEntrada = 1;   // tranca a entrada enquanto se passa o tempo de entrada de 1 carro
       contadorEntrada = 0;     // inicia a contar o tempo no Timer entrada
@@ -78,7 +81,9 @@ void setup() {
     pinMode(trig[i], OUTPUT);
     pinMode(echo[i], INPUT);
   }
-  enviarSerial(55);
+  codeGlobal = 55;
+  flagEnvia = 1;
+  //enviarSerial(55);
   Serial.println("Pronto!");
 }
 
@@ -133,8 +138,12 @@ void inicializaTimers() {
 }
 
 void enviarSerial(int codigo){
+  char code[10];
+  itoa(codigo, code, 10);
+  Serial.print("Enviando ");
+  Serial.println(code);
   Wire.beginTransmission(8);
-  Wire.write(codigo);
+  Wire.write(code);
   Wire.endTransmission();
 }
 
@@ -164,6 +173,16 @@ void loop() {
         //statusSaida = 1;         // como é a primeira vez que está passando por aqui pra um mesmo valor, define que já passou e tranca a saída
         saida(entradaSerial);
     }
+  }
+
+  if(flagEnvia == 1){
+    flagEnvia = 0;
+//    Serial.print("Enviando: ");
+//    Serial.println(codeGlobal);
+    Wire.beginTransmission(8);
+    Wire.write(codeGlobal);
+    Wire.endTransmission();
+    piscaLed(ledPiscante);
   }
   //  delay(500);
   //  entrada(0);
@@ -214,10 +233,12 @@ void entrada(int entrada) {   // sul = 1; norte = 0;
     Serial.print("Código da vaga: ");
     Serial.println(codeCaminho);          
     //enviarSerial(codeCaminho);
-
+    codeGlobal = codeCaminho;
+    flagEnvia = 1;
+    
 
     Serial.println("-----------------------");
-//    ledVaga = definirLedVaga(vagaEscolhida);
+    ledPiscante = definirLedVaga(vagaEscolhida);
 //    piscaLed(ledVerm[ledVaga]);        // inicia a função que piscará o led enquanto a entrada estiver trancada (carro entrando)
   } else {
     Serial.println("Estacionamento lotado!");
@@ -296,10 +317,13 @@ void saida(int vaga) {     // indica ao vetor de vagas que a vaga foi liberada
 
 void piscaLed(int led) {
   int i;
+//  Serial.print("Piscando led ");
+//  Serial.println(led);
   while(trancarEntrada == 1) {
-    digitalWrite(led, HIGH);
-    delay(500);
-    digitalWrite(led, LOW);
+    digitalWrite(ledVerm[led], HIGH);
+    delay(300);
+    digitalWrite(ledVerm[led], LOW);
+    delay(300);
   }
 }
 
