@@ -1,4 +1,4 @@
-  #include <Wire.h>
+﻿  #include <Wire.h>
   
   #define  S00 A1
   #define  S01 A2
@@ -137,6 +137,7 @@ void desliga_all(){
 
 void geraCaminho(){
   switch(estado){
+<<<<<<< HEAD
       case 11:       // ENTRADA SUL VAGA 0 - M01
         digitalWrite(S00, HIGH);
         break;     
@@ -147,6 +148,20 @@ void geraCaminho(){
 <<<<<<< HEAD
       case 14: // ENTRADA SUL VAGA 3
         digitalWrite(S00, HIGH);
+=======
+      case 11: 			// ENTRADA SUL VAGA 0 - M01
+        digitalWrite(S00, HIGH);
+        break;     
+      case 12: 			// ENTRADA SUL VAGA 1 - M02
+        digitalWrite(S05, HIGH);
+        digitalWrite(S03, HIGH); 
+        break;      
+      case 13: 			// ENTRADA SUL VAGA 2 - M01
+	digitalWrite(S00, HIGH);
+
+        break;      
+      case 14: 			// ENTRADA SUL VAGA 3 - M02
+>>>>>>> 8d033e5921a06aaee9cf377ed0c986816e76b834
         digitalWrite(S05, HIGH);
         digitalWrite(S03, HIGH);
 =======
@@ -155,6 +170,7 @@ void geraCaminho(){
 
 >>>>>>> Tulio
         break;      
+<<<<<<< HEAD
       case 14:      // ENTRADA SUL VAGA 3 - M02
         digitalWrite(S05, HIGH);
         digitalWrite(S03, HIGH);
@@ -163,17 +179,32 @@ void geraCaminho(){
         digitalWrite(S00, HIGH);
 <<<<<<< HEAD
         digitalWrite(S05, HIGH);
+=======
+      case 15: 			// ENTRADA SUL VAGA 4 - M04
+        digitalWrite(S00, HIGH);
+        digitalWrite(S04, HIGH);
+        digitalWrite(S01, HIGH);
+        break;      
+      case 16: 			// ENTRADA SUL VAGA 5 - M03
+        digitalWrite(S00, HIGH);
+        digitalWrite(S04, HIGH);
+>>>>>>> 8d033e5921a06aaee9cf377ed0c986816e76b834
         digitalWrite(S07, HIGH);
 =======
         digitalWrite(S04, HIGH);
         digitalWrite(S01, HIGH);
 >>>>>>> Tulio
         break;      
+<<<<<<< HEAD
       case 16:      // ENTRADA SUL VAGA 5 - M03
+=======
+      case 17: 			// ENTRADA SUL VAGA 6 - M04
+>>>>>>> 8d033e5921a06aaee9cf377ed0c986816e76b834
         digitalWrite(S00, HIGH);
         digitalWrite(S04, HIGH);
         digitalWrite(S07, HIGH);
         break;      
+<<<<<<< HEAD
       case 17:      // ENTRADA SUL VAGA 6 - M04
         digitalWrite(S00, HIGH);
         digitalWrite(S04, HIGH);
@@ -218,16 +249,55 @@ void geraCaminho(){
         digitalWrite(S11, HIGH);
         break;     
       case 23:      // ENTRADA SUL VAGA 12 - M05
+=======
+      case 18: 			// ENTRADA SUL VAGA 7 - M03
+        digitalWrite(S00, HIGH);
+        digitalWrite(S04, HIGH);
+        digitalWrite(S07, HIGH);
+        break;     
+      case 19: 			// ENTRADA SUL VAGA 8 - M07
+        digitalWrite(S00, HIGH);
+        digitalWrite(S10, HIGH);
+        digitalWrite(S03, HIGH);
+        break;      
+      case 20: 			// ENTRADA SUL VAGA 9 - M08
+        digitalWrite(S05, HIGH);
+        digitalWrite(S10, HIGH);
+        digitalWrite(S11, HIGH);
+        break;     
+      case 21: 			// ENTRADA SUL VAGA 10 - M07
+        digitalWrite(S00, HIGH);
+        digitalWrite(S10, HIGH);
+        digitalWrite(S03, HIGH);
+        break;     
+      case 22: 			// ENTRADA SUL VAGA 11 - M08
+        digitalWrite(S05, HIGH);
+        digitalWrite(S10, HIGH);
+        digitalWrite(S11, HIGH);
+        break;     
+      case 23: 			// ENTRADA SUL VAGA 12 - M05
         digitalWrite(S05, HIGH);
         digitalWrite(S03, HIGH);
         digitalWrite(S06, HIGH);
         digitalWrite(S07, HIGH);
         break;     
-      case 24:      // ENTRADA SUL VAGA 13 - M06
+      case 24: 			// ENTRADA SUL VAGA 13 - M06
+>>>>>>> 8d033e5921a06aaee9cf377ed0c986816e76b834
         digitalWrite(S05, HIGH);
         digitalWrite(S03, HIGH);
         digitalWrite(S06, HIGH);
         digitalWrite(S07, HIGH);
+        break;     
+<<<<<<< HEAD
+      case 24:      // ENTRADA SUL VAGA 13 - M06
+=======
+      case 25: 			// ENTRADA SUL VAGA 14 - M05
+>>>>>>> 8d033e5921a06aaee9cf377ed0c986816e76b834
+        digitalWrite(S05, HIGH);
+        digitalWrite(S03, HIGH);
+        digitalWrite(S06, HIGH);
+        digitalWrite(S07, HIGH);
+<<<<<<< HEAD
         break;     
       case 25:      // ENTRADA SUL VAGA 14 - M05
         digitalWrite(S05, HIGH);
@@ -260,6 +330,18 @@ void geraCaminho(){
         digitalWrite(S08, HIGH);
         digitalWrite(S02, HIGH);
         digitalWrite(S01, HIGH);
+=======
+        break;      
+      case 26: 			// ENTRADA SUL VAGA 15 - M06
+        digitalWrite(S05, HIGH);
+        digitalWrite(S03, HIGH);
+        digitalWrite(S06, HIGH);
+        digitalWrite(S07, HIGH);
+        break;      
+      case 27: 			// ENTRADA NORTE VAGA 0 - M01
+        digitalWrite(S09, HIGH);
+        digitalWrite(S06, HIGH);
+>>>>>>> 8d033e5921a06aaee9cf377ed0c986816e76b834
         digitalWrite(S04, HIGH);
         digitalWrite(S00, HIGH);
 =======
@@ -270,37 +352,66 @@ void geraCaminho(){
 
 >>>>>>> Tulio
         break;      
+<<<<<<< HEAD
       case 29:      // ENTRADA NORTE VAGA 2 - M01
+=======
+      case 28: 			// ENTRADA NORTE VAGA 1 - M02
+>>>>>>> 8d033e5921a06aaee9cf377ed0c986816e76b834
         digitalWrite(S09, HIGH);
         digitalWrite(S06, HIGH);
 <<<<<<< HEAD
         digitalWrite(S03, HIGH);
+<<<<<<< HEAD
 =======
         digitalWrite(S04, HIGH);
         digitalWrite(S00, HIGH);
 >>>>>>> Tulio
         break;      
       case 30:      // ENTRADA NORTE VAGA 3 - M02
+=======
+
+        break;      
+      case 29: 			// ENTRADA NORTE VAGA 2 - M01
+        digitalWrite(S09, HIGH);
+        digitalWrite(S06, HIGH);
+        digitalWrite(S04, HIGH);
+        digitalWrite(S00, HIGH);
+        break;      
+      case 30: 			// ENTRADA NORTE VAGA 3 - M02
+>>>>>>> 8d033e5921a06aaee9cf377ed0c986816e76b834
         digitalWrite(S09, HIGH);
         digitalWrite(S06, HIGH);
         digitalWrite(S03, HIGH);
         break;      
+<<<<<<< HEAD
       case 31:      // ENTRADA NORTE VAGA 4 - M04
+=======
+      case 31: 			// ENTRADA NORTE VAGA 4 - M04
+>>>>>>> 8d033e5921a06aaee9cf377ed0c986816e76b834
         digitalWrite(S08, HIGH);
         digitalWrite(S02, HIGH);
         digitalWrite(S01, HIGH);
         digitalWrite(S04, HIGH);
         break;     
+<<<<<<< HEAD
       case 32:      // ENTRADA NORTE VAGA 5 - M03
         digitalWrite(S08, HIGH);
         digitalWrite(S07, HIGH);
         break;     
       case 33:      // ENTRADA NORTE VAGA 6 - M04
+=======
+      case 32: 			// ENTRADA NORTE VAGA 5 - M03
+        digitalWrite(S08, HIGH);
+        digitalWrite(S07, HIGH);
+        break;     
+      case 33: 			// ENTRADA NORTE VAGA 6 - M04
+>>>>>>> 8d033e5921a06aaee9cf377ed0c986816e76b834
         digitalWrite(S08, HIGH);
         digitalWrite(S02, HIGH);
         digitalWrite(S01, HIGH);
         digitalWrite(S04, HIGH);
         break;      
+<<<<<<< HEAD
       case 34:      // ENTRADA NORTE VAGA 7 - M03
         digitalWrite(S08, HIGH);
         digitalWrite(S07, HIGH);
@@ -345,6 +456,40 @@ void geraCaminho(){
         digitalWrite(S07, HIGH);
         break;    
       case 42:      // ENTRADA NORTE VAGA 15 - M06 
+=======
+      case 34: 			// ENTRADA NORTE VAGA 7 - M03
+        digitalWrite(S08, HIGH);
+        digitalWrite(S07, HIGH);
+        break;      
+      case 35: 			// ENTRADA NORTE VAGA 8 - M07
+        digitalWrite(S09, HIGH);
+        digitalWrite(S06, HIGH);
+        break;      
+      case 36: 			// ENTRADA NORTE VAGA 9 - M08
+        digitalWrite(S09, HIGH);
+        digitalWrite(S11, HIGH);
+        break;    
+      case 37: 			// ENTRADA NORTE VAGA 10 - M07
+        digitalWrite(S09, HIGH);
+        digitalWrite(S06, HIGH);
+        break;    
+      case 38: 			// ENTRADA NORTE VAGA 11 - M08
+        digitalWrite(S09, HIGH);
+        digitalWrite(S11, HIGH);
+        break;     
+      case 39: 			// ENTRADA NORTE VAGA 12 - M05
+        digitalWrite(S08, HIGH);
+        digitalWrite(S07, HIGH);
+        break;     
+      case 40: 			// ENTRADA NORTE VAGA 13 - M06
+        digitalWrite(S09, HIGH);
+        break;      
+      case 41: 			// ENTRADA NORTE VAGA 14 - M05
+        digitalWrite(S08, HIGH);
+        digitalWrite(S07, HIGH);
+        break;    
+      case 42: 			// ENTRADA NORTE VAGA 15 - M06 
+>>>>>>> 8d033e5921a06aaee9cf377ed0c986816e76b834
         digitalWrite(S09, HIGH);
         break;
       default:
