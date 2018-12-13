@@ -2,23 +2,23 @@
   
   #define  S00 A1
   #define  S01 A2
-  #define  S02 2
-  #define  S03 3
-  #define  S04 4
-  #define  S05 5
-  #define  S06 6 // #define  S12 6 -> mesma coisa que S06 por causa das ligações da protoboard
-  #define  S07 7
-  #define  S08 8
-  #define  S09 9
-  #define  S10 10
-  #define  S11 11
+  #define  S02 3
+  #define  S03 4
+  #define  S04 5
+  #define  S05 6
+  #define  S06 7 // #define  S12 6 -> mesma coisa que S06 por causa das ligações da protoboard
+  #define  S07 8
+  #define  S08 9
+  #define  S09 10
+  #define  S10 11
+  #define  S11 12
 
 ///
 int flag_testeLed=0, i=0, flag_switch=0, cont=0;
 int vet[12] = {11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 40};
 //char cod[3];
 int estado;
-
+int waiting = 1;
 
 
 void setup() {
@@ -41,12 +41,21 @@ void setup() {
 }
 
 void receiveEvent(int howMany){
-  estado = Wire.read();
-  Serial.print("Estado recebido: ");
-  Serial.println(estado);
+  int x = Wire.read();
+  Serial.print("Recebeu ");
+  Serial.println(x);
+  while(Wire.available()){
+    Wire.read();
+  }
+  gerenciaRecebido(x);
+}
+void gerenciaRecebido(int x){
+  waiting = 0;
+  estado = x;
   if(estado == 55){
     Serial.println("DESLIGA TUDO!");
     desliga_all();
+    waiting = 1;
   }else{
     Serial.println("GERANDO CAMINHO!");
     geraCaminho();
@@ -56,29 +65,41 @@ void receiveEvent(int howMany){
 void liga_all(){
   
     digitalWrite(S00, HIGH);
-    delay(150);
+//    Serial.println("s00");
+//    delay(5000);
     digitalWrite(S01, HIGH);
-    delay(150);
+//    Serial.println("s01");
+//    delay(5000);
     digitalWrite(S02, HIGH);
-    delay(150);
+//    Serial.println("s02");
+//    delay(5000);
     digitalWrite(S03, HIGH);
-    delay(150);
+//    Serial.println("s03");
+//    delay(5000);
     digitalWrite(S04, HIGH);
-    delay(150);
+//    Serial.println("s04");
+//    delay(5000);
     digitalWrite(S05, HIGH);
-    delay(150);
+//    Serial.println("s05");
+//    delay(5000);
     digitalWrite(S06, HIGH);
-    delay(150);
+//    Serial.println("s06");
+//    delay(5000);
     digitalWrite(S07, HIGH);
-    delay(150);
+//    Serial.println("s07");
+//    delay(5000);
     digitalWrite(S08, HIGH);
-    delay(150);
+//    Serial.println("s08");
+//    delay(5000);
     digitalWrite(S09, HIGH);
-    delay(150);
+//    Serial.println("s09");
+//    delay(5000);
     digitalWrite(S10, HIGH);
-    delay(150);
+//    Serial.println("s10");
+//    delay(5000);
     digitalWrite(S11, HIGH);
-    delay(150);
+//    Serial.println("s11");
+//    delay(5000);
 }
 
 void desliga_all(){
@@ -116,170 +137,221 @@ void desliga_all(){
 
 void geraCaminho(){
   switch(estado){
-      case 11: // ENTRADA SUL VAGA 0 
+      case 11:       // ENTRADA SUL VAGA 0 - M01
         digitalWrite(S00, HIGH);
         break;     
-      case 12: // ENTRADA SUL VAGA 1
-        digitalWrite(S00, HIGH);
-        break;      
-      case 13: // ENTRADA SUL VAGA 2
-        digitalWrite(S00, HIGH);
+      case 12:      // ENTRADA SUL VAGA 1 - M02
         digitalWrite(S05, HIGH);
         digitalWrite(S03, HIGH); 
         break;      
+<<<<<<< HEAD
       case 14: // ENTRADA SUL VAGA 3
         digitalWrite(S00, HIGH);
         digitalWrite(S05, HIGH);
         digitalWrite(S03, HIGH);
+=======
+      case 13:      // ENTRADA SUL VAGA 2 - M01
+  digitalWrite(S00, HIGH);
+
+>>>>>>> Tulio
         break;      
-      case 15: // ENTRADA SUL VAGA 4
+      case 14:      // ENTRADA SUL VAGA 3 - M02
+        digitalWrite(S05, HIGH);
+        digitalWrite(S03, HIGH);
+        break;      
+      case 15:      // ENTRADA SUL VAGA 4 - M04
         digitalWrite(S00, HIGH);
+<<<<<<< HEAD
         digitalWrite(S05, HIGH);
         digitalWrite(S07, HIGH);
+=======
+        digitalWrite(S04, HIGH);
+        digitalWrite(S01, HIGH);
+>>>>>>> Tulio
         break;      
-      case 16: // ENTRADA SUL VAGA 5
+      case 16:      // ENTRADA SUL VAGA 5 - M03
         digitalWrite(S00, HIGH);
-        digitalWrite(S05, HIGH);
+        digitalWrite(S04, HIGH);
         digitalWrite(S07, HIGH);
         break;      
-      case 17: // ENTRADA SUL VAGA 6
+      case 17:      // ENTRADA SUL VAGA 6 - M04
         digitalWrite(S00, HIGH);
         digitalWrite(S04, HIGH);
         digitalWrite(S01, HIGH);
         break;      
-      case 18: // ENTRADA SUL VAGA 7
+      case 18:      // ENTRADA SUL VAGA 7 - M03
         digitalWrite(S00, HIGH);
         digitalWrite(S04, HIGH);
-        digitalWrite(S01, HIGH);
-        break;     
-      case 19: // ENTRADA SUL VAGA 8
-        digitalWrite(S00, HIGH);
-        digitalWrite(S05, HIGH);
         digitalWrite(S07, HIGH);
+        break;     
+      case 19:      // ENTRADA SUL VAGA 8 - M07
+        digitalWrite(S00, HIGH);
+        digitalWrite(S10, HIGH);
+        digitalWrite(S03, HIGH);
         break;      
-      case 20: // ENTRADA SUL VAGA 9
-        digitalWrite(S00, HIGH);
+      case 20:      // ENTRADA SUL VAGA 9 - M08
         digitalWrite(S05, HIGH);
-        digitalWrite(S07, HIGH);
+<<<<<<< HEAD
+        digitalWrite(S06, HIGH);
+        digitalWrite(S03, HIGH);
+        digitalWrite(S09, HIGH);
+=======
+        digitalWrite(S10, HIGH);
+        digitalWrite(S11, HIGH);
+>>>>>>> Tulio
         break;     
-      case 21: // ENTRADA SUL VAGA 10
+      case 21:      // ENTRADA SUL VAGA 10 - M07
         digitalWrite(S00, HIGH);
+<<<<<<< HEAD
         digitalWrite(S05, HIGH);
         digitalWrite(S06, HIGH);
         digitalWrite(S03, HIGH);
         digitalWrite(S09, HIGH);
-        break;     
-      case 22: // ENTRADA SUL VAGA 11
-        digitalWrite(S00, HIGH);
-        digitalWrite(S05, HIGH);
-        digitalWrite(S06, HIGH);
+=======
+        digitalWrite(S10, HIGH);
         digitalWrite(S03, HIGH);
-        digitalWrite(S09, HIGH);
+>>>>>>> Tulio
         break;     
-      case 23: // ENTRADA SUL VAGA 12
-        digitalWrite(S00, HIGH);
-        digitalWrite(S05, HIGH);
-        digitalWrite(S10, HIGH);
-        break;     
-      case 24: // ENTRADA SUL VAGA 13
-        digitalWrite(S00, HIGH);
-        digitalWrite(S05, HIGH);
-        digitalWrite(S10, HIGH);
-        break;     
-      case 25: // ENTRADA SUL VAGA 14
-        digitalWrite(S00, HIGH);
+      case 22:      // ENTRADA SUL VAGA 11 - M08
         digitalWrite(S05, HIGH);
         digitalWrite(S10, HIGH);
         digitalWrite(S11, HIGH);
+        break;     
+      case 23:      // ENTRADA SUL VAGA 12 - M05
+        digitalWrite(S05, HIGH);
+        digitalWrite(S03, HIGH);
+        digitalWrite(S06, HIGH);
+        digitalWrite(S07, HIGH);
+        break;     
+      case 24:      // ENTRADA SUL VAGA 13 - M06
+        digitalWrite(S05, HIGH);
+        digitalWrite(S03, HIGH);
+        digitalWrite(S06, HIGH);
+        digitalWrite(S07, HIGH);
+        break;     
+      case 25:      // ENTRADA SUL VAGA 14 - M05
+        digitalWrite(S05, HIGH);
+        digitalWrite(S03, HIGH);
+        digitalWrite(S06, HIGH);
+        digitalWrite(S07, HIGH);
         break;      
+<<<<<<< HEAD
       case 26: // ENTRADA SUL VAGA 15
         digitalWrite(S00, HIGH);
         digitalWrite(S05, HIGH);
         digitalWrite(S10, HIGH);
         digitalWrite(S11, HIGH);
+=======
+      case 26:      // ENTRADA SUL VAGA 15 - M06
+        digitalWrite(S05, HIGH);
+        digitalWrite(S03, HIGH);
+        digitalWrite(S06, HIGH);
+        digitalWrite(S07, HIGH);
+>>>>>>> Tulio
         break;      
-      case 27: // ENTRADA NORTE VAGA 0
-        digitalWrite(S08, HIGH);
-        digitalWrite(S02, HIGH);
-        digitalWrite(S01, HIGH);
+      case 27:      // ENTRADA NORTE VAGA 0 - M01
+        digitalWrite(S09, HIGH);
+        digitalWrite(S06, HIGH);
         digitalWrite(S04, HIGH);
         digitalWrite(S00, HIGH);
         break;      
+<<<<<<< HEAD
       case 28: // ENTRADA NORTE VAGA 1
         digitalWrite(S08, HIGH);
         digitalWrite(S02, HIGH);
         digitalWrite(S01, HIGH);
         digitalWrite(S04, HIGH);
         digitalWrite(S00, HIGH);
+=======
+      case 28:      // ENTRADA NORTE VAGA 1 - M02
+        digitalWrite(S09, HIGH);
+        digitalWrite(S06, HIGH);
+        digitalWrite(S03, HIGH);
+
+>>>>>>> Tulio
         break;      
-      case 29: // ENTRADA NORTE VAGA 2
+      case 29:      // ENTRADA NORTE VAGA 2 - M01
+        digitalWrite(S09, HIGH);
+        digitalWrite(S06, HIGH);
+<<<<<<< HEAD
+        digitalWrite(S03, HIGH);
+=======
+        digitalWrite(S04, HIGH);
+        digitalWrite(S00, HIGH);
+>>>>>>> Tulio
+        break;      
+      case 30:      // ENTRADA NORTE VAGA 3 - M02
         digitalWrite(S09, HIGH);
         digitalWrite(S06, HIGH);
         digitalWrite(S03, HIGH);
         break;      
-      case 30: // ENTRADA NORTE VAGA 3
-        digitalWrite(S09, HIGH);
-        digitalWrite(S06, HIGH);
-        digitalWrite(S03, HIGH);
-        break;      
-      case 31: // ENTRADA NORTE VAGA 4
+      case 31:      // ENTRADA NORTE VAGA 4 - M04
+        digitalWrite(S08, HIGH);
+        digitalWrite(S02, HIGH);
+        digitalWrite(S01, HIGH);
+        digitalWrite(S04, HIGH);
+        break;     
+      case 32:      // ENTRADA NORTE VAGA 5 - M03
         digitalWrite(S08, HIGH);
         digitalWrite(S07, HIGH);
         break;     
-      case 32: // ENTRADA NORTE VAGA 5
-        digitalWrite(S08, HIGH);
-        digitalWrite(S07, HIGH);
-        break;     
-      case 33: // ENTRADA NORTE VAGA 6
+      case 33:      // ENTRADA NORTE VAGA 6 - M04
         digitalWrite(S08, HIGH);
         digitalWrite(S02, HIGH);
         digitalWrite(S01, HIGH);
         digitalWrite(S04, HIGH);
         break;      
-      case 34: // ENTRADA NORTE VAGA 7
-        digitalWrite(S08, HIGH);
-        digitalWrite(S02, HIGH);
-        digitalWrite(S01, HIGH);
-        digitalWrite(S04, HIGH);
-        break;      
-      case 35: // ENTRADA NORTE VAGA 8
+      case 34:      // ENTRADA NORTE VAGA 7 - M03
         digitalWrite(S08, HIGH);
         digitalWrite(S07, HIGH);
         break;      
-      case 36: // ENTRADA NORTE VAGA 9
-        digitalWrite(S08, HIGH);
-        digitalWrite(S07, HIGH);
-        break;    
-      case 37: // ENTRADA NORTE VAGA 10
+      case 35:      // ENTRADA NORTE VAGA 8 - M07
         digitalWrite(S09, HIGH);
-        break;    
-      case 38: // ENTRADA NORTE VAGA 11
+        digitalWrite(S06, HIGH);
+        break;      
+      case 36:      // ENTRADA NORTE VAGA 9 - M08
         digitalWrite(S09, HIGH);
+        digitalWrite(S11, HIGH);
+        break;    
+      case 37:      // ENTRADA NORTE VAGA 10 - M07
+        digitalWrite(S09, HIGH);
+        digitalWrite(S06, HIGH);
+        break;    
+      case 38:      // ENTRADA NORTE VAGA 11 - M08
+        digitalWrite(S09, HIGH);
+        digitalWrite(S11, HIGH);
         break;     
+<<<<<<< HEAD
       case 39: // ENTRADA NORTE VAGA 12
         digitalWrite(S09, HIGH);
         digitalWrite(S06, HIGH);
         digitalWrite(S03, HIGH);
+=======
+      case 39:      // ENTRADA NORTE VAGA 12 - M05
+        digitalWrite(S08, HIGH);
+        digitalWrite(S07, HIGH);
+>>>>>>> Tulio
         break;     
-      case 40: // ENTRADA NORTE VAGA 13
+      case 40:      // ENTRADA NORTE VAGA 13 - M06
         digitalWrite(S09, HIGH);
+<<<<<<< HEAD
         digitalWrite(S06, HIGH);
         digitalWrite(S03, HIGH);
+=======
+>>>>>>> Tulio
         break;      
-      case 41: // ENTRADA NORTE VAGA 14
-        digitalWrite(S09, HIGH);
-        digitalWrite(S11, HIGH);
+      case 41:      // ENTRADA NORTE VAGA 14 - M05
+        digitalWrite(S08, HIGH);
+        digitalWrite(S07, HIGH);
         break;    
-      case 42: // ENTRADA NORTE VAGA 15
+      case 42:      // ENTRADA NORTE VAGA 15 - M06 
         digitalWrite(S09, HIGH);
-        digitalWrite(S11, HIGH);
         break;
       default:
         Serial.println("DEFAULT SWITCH");
         break;
     }
 }
-
 void teste_leds(){
     if(flag_testeLed == 0){ 
       liga_all();
@@ -291,8 +363,27 @@ void teste_leds(){
 }
 
 
-
+int j=11;
 void loop() {
+//  liga_all();
+//  if(j>42) j=11;
+//  estado = j;
+//  geraCaminho();
+//  j++;
+//  Serial.print("Código: ");
+//  Serial.println(j);
+//  delay(10000);
+//  desliga_all();
+
+
+
+
+
+  if(waiting == 1){
+    Serial.println("Aguardando código...");
+  }
+  delay(800);
+//  delay(500);
   
 //teste_leds();  //função que irá ligar e desligar os leds para saber se todos estão ligando e desligando corretamente
 
